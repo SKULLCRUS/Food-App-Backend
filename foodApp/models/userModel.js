@@ -13,11 +13,11 @@ console.log('DB connected successfully! ')
 //Schema
 const  userSchema =mongoose.Schema({
     name:{
-        type:'String',
+        type:String,
         required:true
     },
     email:{
-        type:'String',
+        type:String,
         required:true,
         unique:true,
         validate:function(){
@@ -25,17 +25,26 @@ const  userSchema =mongoose.Schema({
         }
     },
     password:{
-        type:'String',
+        type:String,
         required:true,
         minLength:8
     },
     confirmPassword:{
-        type:'String',
-        required:true,
+        type:String,
+        // required:true,
         minLength:8,
         validate:function(){
             return this.confirmPassword==this.password;
         }
+    },
+    role:{
+        type:String,
+        enum:['admin','user','restaurant_Owner ','Delivery'],
+        default:'user'
+    },
+    profileImage:{
+        type:String,
+        default:'img/users/default.png'
     }
 
 });
