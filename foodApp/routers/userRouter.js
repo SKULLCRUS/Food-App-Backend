@@ -5,7 +5,7 @@ const app = express();
 // const userModel=require('../models/userModel');
 // const protectRoute = require('./authHelper');
 const{getUser,getAllUser,deleteUser,updateUser} = require('../controller/userController');
-const{signup,login,isAuthorised,protectRoute} = require('../controller/authController');
+const{signup,login,isAuthorised,protectRoute,forgetPassword,resetPassword,logout} = require('../controller/authController');
 
 // const { functions, functionsIn } = require('lodash');
 
@@ -25,6 +25,18 @@ userRouter
 userRouter
 .route('/login')
 .post(login);
+
+userRouter
+.route('/forgetPassword')
+.post(forgetPassword);
+
+userRouter
+.route('/resetPassword/:token')
+.post(resetPassword);
+
+userRouter
+.route('/logout')
+.get(logout);
 
 //Profile page
 userRouter.use(protectRoute);

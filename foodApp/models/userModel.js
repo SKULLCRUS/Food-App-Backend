@@ -1,6 +1,8 @@
 const mongoose=require('mongoose');
 const emailValidator = require('email-validator');
 const bcrypt = require('bcrypt');
+const crypto = require('crypto');
+
 
 
 let db_link=require('../../secrets').DB_LINK;
@@ -48,7 +50,8 @@ const  userSchema =mongoose.Schema({
     profileImage:{
         type:String,
         default:'img/users/default.png'
-    }
+    },
+    resetToken:String//*shorthand notation for assigning type to a field.
 
 });
 //Pre Hook is used jisse hum confirm password waali jko redundant field hai use db mein na store karien.
@@ -56,7 +59,18 @@ const  userSchema =mongoose.Schema({
 userSchema.pre('save', function(){
     this.confirmPassword=undefined;
 })
-
+userSchema.methods.createResetToken=function(){
+    //*Create unique token using crypto library
+    const resetToken=crypto.randomBytes(32).toString("hex");
+    this.resetToken=resetToken;
+    return resetToken;
+}
+userSchema.methods.resetPasswordHandler=function(password,confirmPassword){
+   this.password=password;
+   this.confirmPassword=confirmPassword;
+   this.resetToken=undefined;
+    
+}
 //Pre Hook is made.
 // userSchema.pre('save',async function(){
 //     let salt=await bcrypt.genSalt();
